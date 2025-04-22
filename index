@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Aplicaciones</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --color-principal: #e5322d;
+      --color-fondo: #f8f8f8;
+      --color-texto: #333;
+      --color-boton: #007bff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--color-fondo);
+      color: var(--color-texto);
+    }
+
+    header {
+      background-color: var(--color-principal);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .login-container,
+    .app-container,
+    .iframe-container {
+      display: none;
+      padding: 2rem;
+    }
+
+    .active {
+      display: block;
+    }
+
+    .login-box {
+      max-width: 400px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: var(--color-principal);
+      color: white;
+      border: none;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .login-box button:hover {
+      background-color: #c4231e;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .app-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .app-card:hover {
+      transform: scale(1.02);
+    }
+
+    .app-card h3 {
+      margin: 0.5rem 0 0.2rem;
+    }
+
+    .app-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .iframe-viewer {
+      width: 100%;
+      height: 80vh;
+      border: none;
+      margin-top: 1rem;
+    }
+
+    .btn-volver {
+      display: block;
+      margin: 1rem auto;
+      background-color: var(--color-boton);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-volver:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        font-size: 1.2rem;
+      }
+
+      .login-box {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>🔐 Acceso a Mis Aplicaciones</header>
+
+  <div class="login-container active" id="loginContainer">
+    <div class="login-box">
+      <h2>Iniciar Sesión</h2>
+      <input type="text" id="username" placeholder="Usuario">
+      <input type="password" id="password" placeholder="Clave">
+      <button onclick="login()">Entrar</button>
+      <p id="loginError" style="color:red; margin-top:1rem;"></p>
+    </div>
+  </div>
+
+  <div class="app-container" id="appContainer">
+    <div class="app-grid" id="appGrid"></div>
+  </div>
+
+  <div class="iframe-container" id="iframeContainer">
+    <iframe id="viewer" class="iframe-viewer" src=""></iframe>
+    <button class="btn-volver" onclick="volverAlPanel()">🔙 Volver al panel</button>
+  </div>
+
+  <script>
+    const apps = [
+      { nombre: "Certificado", url: "https://carlos2601.github.io/certificado/", icono: "📄" },
+      { nombre: "JPG a PDF", url: "https://carlos2601.github.io/jpg.pdf/", icono: "🖼️" },
+      { nombre: "Convertir", url: "https://carlos2601.github.io/converti/", icono: "🔄" },
+      { nombre: "Descargar con Cédula", url: "https://carlos2601.github.io/elusuariodescargarconexpediciondecedula/", icono: "📥" },
+      { nombre: "Junta Bateas Sector 3", url: "https://carlos2601.github.io/JuntaBateasSector3", icono: "🏘️" },
+      { nombre: "PDF ↔ JPG", url: "https://carlos2601.github.io/pdf-jpg", icono: "🖨️" },
+      { nombre: "Convertir PDF-JPG", url: "https://carlos2601.github.io/convertir-pdf-jpg/", icono: "📷" },
+      { nombre: "Mensual", url: "https://carlos2601.github.io/mensual", icono: "🗓️" },
+      { nombre: "Cesantías y Primas", url: "https://carlos2601.github.io/cesant-as-primas/", icono: "💰" },
+      { nombre: "Calcular Día Laborado", url: "https://carlos2601.github.io/calculadora/", icono: "🧮" },
+      { nombre: "Calcular Horas", url: "https://carlos2601.github.io/horas/", icono: "🕒" },
+    ];
+
+    function login() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      const error = document.getElementById("loginError");
+
+      if (user === "4438681" && pass === "4438681") {
+        document.getElementById("loginContainer").classList.remove("active");
+        document.getElementById("appContainer").classList.add("active");
+        renderApps();
+      } else {
+        error.textContent = "Usuario o clave incorrectos.";
+      }
+    }
+
+    function renderApps() {
+      const grid = document.getElementById("appGrid");
+      grid.innerHTML = "";
+      apps.forEach(app => {
+        const card = document.createElement("div");
+        card.className = "app-card";
+        card.innerHTML = `<div style="font-size:2rem;">${app.icono}</div><h3>${app.nombre}</h3>`;
+        card.onclick = () => mostrarApp(app.url);
+        grid.appendChild(card);
+      });
+    }
+
+    function mostrarApp(url) {
+      document.getElementById("appContainer").classList.remove("active");
+      document.getElementById("viewer").src = url;
+      document.getElementById("iframeContainer").classList.add("active");
+    }
+
+    function volverAlPanel() {
+      document.getElementById("iframeContainer").classList.remove("active");
+      document.getElementById("viewer").src = "";
+      document.getElementById("appContainer").classList.add("active");
+    }
+  </script>
+</body>
+</html>
